@@ -1,5 +1,5 @@
 import requests 
-from config import URL_AUTHORIZATION, APP_CLIENT_SECRET, APP_CLIENT_ID, SECRET_KEY, URL_POINT_LIST, URL_PRICE_LIST
+from config import URL_AUTHORIZATION, APP_CLIENT_SECRET, APP_CLIENT_ID, SECRET_KEY, URL_POINT_LIST, URL_PRICE_LIST, URL_PRODUCT_LIST
 import datetime
 
 def get_token(): 
@@ -35,3 +35,17 @@ def get_points_price_list(token: str, point_id: str):
         price_list = f'Ошибка при получении прайс-листов по точке:, {response.text}'
     print(str(response.text))
     return price_list
+
+def get_products(token: str, point_id: str, label: str): 
+    request_header = {'X-SBISAccessToken': token}
+    response = requests.get(URL_PRODUCT_LIST, headers = request_header, json = {"pointId": token,
+                                                                                "priceListId": point_id,
+                                                                                "searchString": label,
+                                                                                "withBalance": "True", 
+                                                                                "pageSize": "1100"})
+    if response.status_code == 200:
+        product_list = response.json()
+    else:
+        product_list = f'Ошибка при получении прайс-листов по точке:, {response.text}'
+    print(str(response.text))
+    return product_list
