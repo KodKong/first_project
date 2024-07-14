@@ -14,6 +14,13 @@ class Client(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     tg_id: Mapped[str] = mapped_column(String(25))
 
+class Shop(Base): 
+    __tablename__ = 'shops'
+
+    id: Mapped[int] = mapped_column(primary_key=True) 
+    sbys_id: Mapped[str] = mapped_column(String(32))
+    tg_id: Mapped[str] = mapped_column(String(25))
+    address: Mapped[str] = mapped_column(String(64))
 
 class Order(Base): 
     __tablename__ = 'orders'
@@ -23,6 +30,7 @@ class Order(Base):
     tg_id_client: Mapped[str] = mapped_column(String(25))
     experation_time: Mapped[str] = mapped_column(String(25))
     execute: Mapped[str] = mapped_column(String(6))
+    shop_id: Mapped[int] = mapped_column(ForeignKey('shops.id'))
 
 class Category(Base): 
     __tablename__ = 'categories'
