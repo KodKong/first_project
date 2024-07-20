@@ -20,6 +20,7 @@ class Shop(Base):
     id: Mapped[int] = mapped_column(primary_key=True) 
     sbys_id: Mapped[str] = mapped_column(String(32))
     tg_id: Mapped[str] = mapped_column(String(25))
+    price_list_id: Mapped[str] = mapped_column(String(25))
     address: Mapped[str] = mapped_column(String(64))
 
 class Order(Base): 
