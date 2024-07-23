@@ -30,7 +30,7 @@ class Order(Base):
     product: Mapped[str] = mapped_column(String(200))
     tg_id_client: Mapped[str] = mapped_column(String(25))
     experation_time: Mapped[str] = mapped_column(String(25))
-    execute: Mapped[str] = mapped_column(String(6))
+    execute: Mapped[str] = mapped_column(String(6)) # CREATE - создан, TAKEN - забрали, NOT_TOKEN - не забран
     shop_id: Mapped[int] = mapped_column(ForeignKey('shops.id'))
 
 class Category(Base): 

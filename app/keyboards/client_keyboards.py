@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 import app.database.client_requests as rq
 
@@ -29,4 +29,10 @@ async def model_list_keyboard(brand_id):
     all_models = await rq.get_model_list(brand_id)
     for model in all_models: 
         keyboard.add(InlineKeyboardButton(text = model.name, callback_data = f'model_list_{str(model.name)}_{str(model.id)}'))
+    return keyboard.adjust(2).as_markup()
+
+async def response_shop_keyboard(id_shop): 
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(InlineKeyboardButton(text = 'Подтвердить', callback_data = f'approve_order_positive_{str(id_shop)}'))
+    keyboard.add(InlineKeyboardButton(text = 'Отклонить', callback_data = f'approve_order_negative_{str(id_shop)}'))
     return keyboard.adjust(2).as_markup()

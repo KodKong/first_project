@@ -1,6 +1,7 @@
 from app.database.models import async_session
 from app.database.models import Client, Order, Shop, Model, Brand, Category
 from sqlalchemy import select, update, delete
+import datetime
 
 async def set_client(tg_id): 
     async with async_session() as session: 
@@ -27,6 +28,10 @@ async def get_model_list(brand_id):
         return await session.scalars(select(Model).where(Model.brand == brand_id))
     
 async def create_order(tg_client, product_order, id_shop): 
+    current_datetime = datetime.now()
+    datetime_str = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
     async with async_session() as session:  
-        session.add(Order(product = product_order, tg_id_client = tg_client, shop_id = id_shop))
+        new_order = Order(product = product_order, tg_id_client = tg_client, shop_id = id_shop, experation_time = datetime_str, execute = 'CREATE')
+        session.add(new_order)
         await session.commit()
+        return new_order.id
