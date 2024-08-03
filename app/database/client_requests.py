@@ -28,10 +28,9 @@ async def get_model_list(brand_id):
         return await session.scalars(select(Model).where(Model.brand == brand_id))
     
 async def create_order(tg_client, product_order, id_shop): 
-    current_datetime = datetime.now()
-    datetime_str = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
+    current_datetime = datetime.date.today().isoformat()
     async with async_session() as session:  
-        new_order = Order(product = product_order, tg_id_client = tg_client, shop_id = id_shop, experation_time = datetime_str, execute = 'CREATE')
+        new_order = Order(product = product_order, tg_id_client = tg_client, shop_id = id_shop, experation_time = str(current_datetime), execute = 'CREATE')
         session.add(new_order)
         await session.commit()
         return new_order.id
