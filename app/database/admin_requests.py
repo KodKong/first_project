@@ -36,3 +36,32 @@ async def get_category_list():
 async def get_brand_list(category_id): 
     async with async_session() as session: 
         return await session.scalars(select(Brand).where(Brand.category == category_id))
+    
+async def get_model_list(brand_id): 
+    async with async_session() as session: 
+        return await session.scalars(select(Model).where(Model.brand == brand_id))
+    
+async def delete_model(model_id): 
+    async with async_session() as session: 
+        stmt = select(Model).filter(Model.id == model_id)
+        result = await session.execute(stmt)
+        model_to_delete = result.scalars().first()
+        await session.delete(model_to_delete)
+        await session.commit()
+
+async def delete_brand(brand_id): 
+    async with async_session() as session: 
+        stmt = select(Brand).filter(Brand.id == brand_id)
+        result = await session.execute(stmt)
+        brand_to_delete = result.scalars().first()
+        await session.delete(brand_to_delete)
+        await session.commit()
+
+async def delete_category(category_id): 
+    async with async_session() as session: 
+        stmt = select(Category).filter(Category.id == category_id)
+        result = await session.execute(stmt)
+        category_to_delete = result.scalars().first()
+        await session.delete(category_to_delete)
+        await session.commit()
+        

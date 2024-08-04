@@ -20,6 +20,7 @@ class Adding_Obj(StatesGroup):
     text_for_marketing = State()
     photo_for_marketing = State()
 
+# Клавиатуры 
 
 @router_admin.message(Command('first_admin_panel'))
 async def show_first_admin_button(message: Message): 
@@ -36,6 +37,7 @@ async def show_admin_button(message: Message, state: FSMContext):
     else: 
         await message.answer('Я вас не понимаю')
 
+# Обновление прайс листов ДОДЕЛАТЬ
 @router_admin.callback_query(F.data == 'update_shop_list')
 async def show_categories(callback: CallbackQuery):
     new_list_shops = get_point_list()
@@ -60,6 +62,17 @@ async def add_category(message: Message, state: FSMContext):
    await message.answer('Категория успешно добавлена')
    await state.clear()
 
+# Удаление категории 
+
+@router_admin.callback_query(F.data == 'delete_category')
+async def start_delete_model(callback: CallbackQuery):
+   await callback.message.answer('Выберите категорию', reply_markup = await kb.delete_category_keyboard())
+
+@router_admin.callback_query(F.data.startswith('delete_category_1'))
+async def start_delete_model(callback: CallbackQuery):
+   await rq.delete_category(callback.data.split('_')[3])
+   await callback.message.answer('Категория успешно удалена')
+
 # Добавление бренда
 
 @router_admin.callback_query(F.data == 'add_brand')
@@ -79,6 +92,21 @@ async def add_brand(message: Message, state: FSMContext):
    await rq.create_new_brand(data_state['name_brand'], data_state['parent'])
    await message.answer('Бренд успешно добавлен')
    await state.clear()
+
+# Удаление бренда 
+
+@router_admin.callback_query(F.data == 'delete_brand')
+async def start_delete_brand(callback: CallbackQuery):
+   await callback.message.answer('Выберите категорию', reply_markup = await kb.delete_category_for_brand_list_keyboard())
+
+@router_admin.callback_query(F.data.startswith('delete_brand_1'))
+async def start_delete_brand(callback: CallbackQuery):
+   await callback.message.answer('Выберите бренд, который необходимо удалить', reply_markup = await kb.delete_brand_list_keyboard(callback.data.split('_')[3]))
+
+@router_admin.callback_query(F.data.startswith('delete_brand_2'))
+async def adding_delete_step(callback: CallbackQuery):
+   await rq.delete_brand(callback.data.split('_')[3])
+   await callback.message.answer('Бренд успешно удален со всеми моделями')
 
 # Добавление модели
 
@@ -104,6 +132,25 @@ async def add_model(message: Message, state: FSMContext):
    await state.clear()
    await message.answer('Модель успешно добавлен')
    await state.clear()
+
+# Удаление модели 
+
+@router_admin.callback_query(F.data == 'delete_model')
+async def start_delete_model(callback: CallbackQuery):
+   await callback.message.answer('Выберите категорию', reply_markup = await kb.delete_category_for_model_list_keyboard())
+
+@router_admin.callback_query(F.data.startswith('delete_model_1'))
+async def start_delete_model(callback: CallbackQuery):
+   await callback.message.answer('Выберите бренд', reply_markup = await kb.delete_brand_for_model_list_keyboard(callback.data.split('_')[3]))
+
+@router_admin.callback_query(F.data.startswith('delete_model_2'))
+async def adding_delete_step(callback: CallbackQuery, state: FSMContext):
+   await callback.message.answer('Выберите модель, которую необходимо удалить', reply_markup = await kb.delete_model_list_keyboard(callback.data.split('_')[3]))
+
+@router_admin.callback_query(F.data.startswith('delete_model_3'))
+async def adding_delete_step(callback: CallbackQuery):
+   await rq.delete_model(callback.data.split('_')[3])
+   await callback.message.answer('Модель успешно удалена')
 
 # Рассылка рекламы 
 
