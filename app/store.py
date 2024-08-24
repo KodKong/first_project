@@ -17,7 +17,7 @@ def get_token():
     except:
         return 'error'
 
-def get_point_list(): 
+async def get_point_list(): 
     try: 
         token = str(get_token())
         request_header = {'X-SBISAccessToken': token}
@@ -30,7 +30,7 @@ def get_point_list():
     except:
         return 'error'
 
-def get_points_price_list(point_id: str): 
+async def get_points_price_list(point_id: str): 
     try: 
         token = str(get_token())
         request_header = {'X-SBISAccessToken': token}
@@ -47,7 +47,7 @@ def get_points_price_list(point_id: str):
     except:
         return 'error'
 
-def get_products(point_sbys_id: str, price_list_id: str, label: str): 
+async def get_products(point_sbys_id: str, price_list_id: str, label: str): 
     try: 
         token = str(get_token())
         request_header = {'X-SBISAccessToken': token}
@@ -64,9 +64,9 @@ def get_products(point_sbys_id: str, price_list_id: str, label: str):
     except:
         return 'error'
 
-def show_products(point_sbys_id: str, price_list_id: str, label: str): 
+async def show_products(point_sbys_id: str, price_list_id: str, label: str): 
     try:
-        json_list_products = get_products(point_sbys_id, price_list_id, label)
+        json_list_products = await get_products(point_sbys_id, price_list_id, label)
         array_products = []
         string_product = ''
         iteraction = 1

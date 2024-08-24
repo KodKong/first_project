@@ -1,11 +1,18 @@
 from app.database.models import async_session
-from app.database.models import Client, Shop, Model, Brand, Category
+from app.database.models import Client, Shop, Model, Brand, Category, Order
 from sqlalchemy import select
 
 async def get_shop_list(): 
     try:
         async with async_session() as session: 
             return await session.scalars(select(Shop))
+    except: 
+        return('error')
+    
+async def get_shop_by_id(id_shop): 
+    try:
+        async with async_session() as session: 
+            return await session.scalars(select(Shop).where(id == id_shop))
     except: 
         return('error')
     
@@ -130,4 +137,20 @@ async def delete_shop(shop_id: str):
             await session.commit()
     except: 
         return('error')
+    
+async def create_structure_to_database(): 
+    categories = ['Табак', 'Одноразовые электронные сигареты', 'Жидкости', 'Бестабачные смеси', 'Принадлежности для кальяна', 'Картриджи/испарители', 'Кальяны', 'Жевательный табак', 'Уголь', 'POD - системы'] 
+    brand_tabac = ['']
+    try:
+        async with async_session() as session: 
+            for category in categories:
+                new_category = Category(name = category)
+                session.add(new_category)
+                await session.commit()
+    except: 
+        return('error')
+    
+
+
+        
         

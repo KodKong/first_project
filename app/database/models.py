@@ -25,13 +25,13 @@ class Shop(Base):
 
 class Order(Base): 
     __tablename__ = 'orders'
-
+    
     id: Mapped[int] = mapped_column(primary_key=True)
     product: Mapped[str] = mapped_column(String(200))
     tg_id_client: Mapped[str] = mapped_column(String(25))
     experation_time: Mapped[str] = mapped_column(String(25))
-    execute: Mapped[str] = mapped_column(String(6)) # CREATE - создан, EXPIRED - время вышло
-    shop_id: Mapped[int] = mapped_column(ForeignKey('shops.id'))
+    execute: Mapped[str] = mapped_column(String(10)) # CREATE - создан, EXPIRED - время вышло
+    shop_id: Mapped[str] = mapped_column(String(10))
 
 class Category(Base): 
     __tablename__ = 'categories'

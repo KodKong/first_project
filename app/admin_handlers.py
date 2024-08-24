@@ -85,7 +85,7 @@ async def update_price_lists(callback: CallbackQuery):
     current_list_shops = await rq.get_shop_list()
     message = ''
     for shop_id in current_list_shops:
-      price_lists = get_points_price_list(shop_id.sbys_id)
+      price_lists = await get_points_price_list(shop_id.sbys_id)
       try:
          if price_lists['priceLists'][0]['id'] is not None: 
             await rq.update_price_list(str(shop_id.sbys_id), str(price_lists['priceLists'][0]['id']))
@@ -240,4 +240,14 @@ async def show_id_account(message: Message):
         await message.answer(f'{message.from_user.id}')
     except Exception as err:
         await message.answer(str(err)) 
+
+# Оповещение магазина о истечении срока брони 
+
+async def notification_timer(id_shop: str, position: str):
+   try: 
+      tg_id_shops = await rq.get_shop_by_id(str(id_shop))
+      for i in tg_id_shops:
+         await bot.send_message(chat_id = str(i.tg_id), text = f'Срок бронирования на {position} истек')
+   except: 
+      await print('error')
 
